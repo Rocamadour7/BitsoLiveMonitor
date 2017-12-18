@@ -3,16 +3,15 @@ import hmac
 import hashlib
 import requests
 import configparser
-
-config = configparser.ConfigParser()
-config.read('credentials.ini')
+import os
+from settings import config
 
 
 class Account:
     def __init__(self):
         self.balance = {}
-        self.api_key = config['API']['key']
-        self.api_secret = config['API']['secret']
+        self.api_key = config.bitso_api_key
+        self.api_secret = config.bitso_api_secret
         self.nonce = lambda: str(int(round(time.time() * 1000)))
 
     def _create_signature(self, nonce, request_path, json_payload=''):
