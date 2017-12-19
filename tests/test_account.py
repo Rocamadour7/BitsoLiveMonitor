@@ -103,6 +103,36 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(xrp, balance['xrp'])
         self.assertEqual(mxn, balance['mxn'])
 
+    @mock.patch('requests.get')
+    def test_get_details(self, mock_get):
+        import json
+        content_dict = {
+            "success": True,
+            "payload": {
+                "client_id": "1234",
+                "first_name": "Claude",
+                "last_name":  "Shannon",
+                "status": "active",
+                "daily_limit": "5300.00",
+                "monthly_limit": "32000.00",
+                "daily_remaining": "3300.00",
+                "monthly_remaining": "31000.00",
+                "cellphone_number": "verified",
+                "cellphone_number_stored": "+525555555555",
+                "email_stored": "shannon@maxentro.py",
+                "official_id": "submitted",
+                "proof_of_residency": "submitted",
+                "signed_contract": "unsubmitted",
+                "origin_of_funds": "unsubmitted"
+            }
+        }
+        content = json.loads(json.dumps(content_dict))
+        mock_resp = self._mock_response(content=content, json_data=content)
+        mock_get.return_value = mock_resp
+
+        details = self.account._get_details()
+        self.assertDictEqual(content_dict['payload'], details)
+
     def test_get_btc(self):
         btc = 0.0001
         self.account.balance['btc'] = btc

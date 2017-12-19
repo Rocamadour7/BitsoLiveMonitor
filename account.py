@@ -10,6 +10,7 @@ from settings import config
 class Account:
     def __init__(self):
         self.balance = {}
+        self.details = {}
         self.api_key = config.bitso_api_key
         self.api_secret = config.bitso_api_secret
         self.nonce = lambda: str(int(round(time.time() * 1000)))
@@ -46,8 +47,23 @@ class Account:
             balance[currency['currency']] = float(currency['available'])
         return balance
 
+    def _get_details(self):
+        details_nonce = self.nonce()
+        request_path = '/v3/account_status/'
+        signature = self._create_signature(nonce=details_nonce, request_path=request_path)
+        auth_header = self._create_auth_header(nonce=details_nonce, signature=signature)
+        response = self._get_request(request_path=request_path, auth_header=auth_header)
+        json_content = self._parse_jason(response=response)
+        details = {}
+        if json_content['success']:
+            for key, value in json_content['payload'].items():
+                details[key] = value
+        return details
+
     def connect(self):
         self.balance = self._get_balance()
+        time.sleep(1)
+        self.details = self._get_details()
 
     @property
     def btc(self):
@@ -64,3 +80,9 @@ class Account:
     @property
     def mxn(self):
         return self.balance['mxn']
+
+
+if __name__ == '__main__':
+    account = Account()
+    account.connect()
+    print(account.details)
