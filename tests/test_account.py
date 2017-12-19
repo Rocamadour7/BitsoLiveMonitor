@@ -111,7 +111,7 @@ class TestAccount(unittest.TestCase):
             "payload": {
                 "client_id": "1234",
                 "first_name": "Claude",
-                "last_name":  "Shannon",
+                "last_name": "Shannon",
                 "status": "active",
                 "daily_limit": "5300.00",
                 "monthly_limit": "32000.00",
@@ -132,6 +132,40 @@ class TestAccount(unittest.TestCase):
 
         details = self.account._get_details()
         self.assertDictEqual(content_dict['payload'], details)
+
+    @mock.patch('requests.get')
+    def test_connect(self, mock_get):
+        tic = time.time()
+
+        btc = 0.0001
+        eth = 0.05
+        xrp = 50.32
+        mxn = 127.54
+
+        import json
+        content_json = {'success': True, 'payload':
+            {'balances':
+                [{
+                    'currency': 'btc',
+                    'available': btc
+                }, {
+                    'currency': 'eth',
+                    'available': eth,
+                }, {
+                    'currency': 'xrp',
+                    'available': xrp,
+                }, {
+                    'currency': 'mxn',
+                    'available': mxn
+                }]
+            }}
+        content = json.loads(json.dumps(content_json))
+        mock_resp = self._mock_response(content=content, json_data=content)
+        mock_get.return_value = mock_resp
+
+        self.account.connect()
+        toc = time.time()
+        self.assertGreater(toc-tic, 1.0)
 
     def test_get_btc(self):
         btc = 0.0001
