@@ -156,3 +156,18 @@ class TestAccount(unittest.TestCase):
         self.account.balance['mxn'] = mxn
         account_mxn = self.account.mxn
         self.assertEqual(mxn, account_mxn)
+
+    def test_get_full_name(self):
+        full_name = 'Claude Shannon'
+        self.account.details['first_name'] = 'claude  '
+        self.account.details['last_name'] = ' shannon'
+        account_full_name = self.account.full_name
+        self.assertEqual(full_name, account_full_name)
+
+    def test_is_active(self):
+        self.account.details['status'] = 'active'
+        self.assertTrue(self.account.is_active)
+
+    def test_is_not_active(self):
+        self.account.details['status'] = 'inactive'
+        self.assertFalse(self.account.is_active)

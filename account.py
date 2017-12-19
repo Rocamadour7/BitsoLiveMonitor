@@ -81,8 +81,13 @@ class Account:
     def mxn(self):
         return self.balance['mxn']
 
+    @property
+    def full_name(self):
+        return self.details['first_name'].strip().title() + ' ' + self.details['last_name'].strip().title()
 
-if __name__ == '__main__':
-    account = Account()
-    account.connect()
-    print(account.details)
+    @property
+    def is_active(self):
+        if self.details['status'] == 'active':
+            return True
+        else:
+            return False
