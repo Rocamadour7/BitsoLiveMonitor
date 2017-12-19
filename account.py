@@ -34,16 +34,20 @@ class Account:
         response_json = response.json()
         return response_json
 
-    def get_balance(self):
+    def _get_balance(self):
         balance_nonce = self.nonce()
         request_path = '/v3/balance/'
         signature = self._create_signature(nonce=balance_nonce, request_path=request_path)
         auth_header = self._create_auth_header(nonce=balance_nonce, signature=signature)
         response = self._get_request(request_path=request_path, auth_header=auth_header)
         json_content = self._parse_jason(response=response)
+        balance = {}
         for currency in json_content['payload']['balances']:
-            self.balance[currency['currency']] = float(currency['available'])
-        self.balance
+            balance[currency['currency']] = float(currency['available'])
+        return balance
+
+    def connect(self):
+        self.balance = self._get_balance()
 
     @property
     def btc(self):

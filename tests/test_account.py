@@ -42,7 +42,7 @@ class TestAccount(unittest.TestCase):
         cls.secret = cls.account.api_secret
         cls.nonce = str(int(round(time.time() * 1000)))
         cls.request_path = '/v3/account_status/'
-        cls.message = cls.nonce+'GET'+cls.request_path+''
+        cls.message = cls.nonce + 'GET' + cls.request_path + ''
         cls.signature = hmac.new(cls.secret.encode('UTF-8'), cls.message.encode('UTF-8'), hashlib.sha256).hexdigest()
 
     def setUp(self):
@@ -69,27 +69,39 @@ class TestAccount(unittest.TestCase):
         result = self.account._get_request(request_path=self.request_path, auth_header=auth_header)
         self.assertEqual(result.json(), content)
 
-    # TODO: Fix this test
-    # @mock.patch('requests.get')
-    # def test_get_balance(self, mock_get):
-    #     btc = 0.0001
-    #     eth = 0.05
-    #     xrp = 50.32
-    #     mxn = 127.54
-    #
-    #     import json
-    #     content = json.dumps({'btc': btc, 'eth': eth, 'xrp': xrp, 'mxn': mxn})
-    #     # content = {'btc': btc, 'eth': eth, 'xrp': xrp, 'mxn': mxn}
-    #     mock_resp = self._mock_response(content=content, json_data=content)
-    #     json_resp = mock_resp.json()
-    #     mock_get.return_value = mock_resp
-    #
-    #     self.account.get_balance()
-    #     balance = self.account.balance
-    #     self.assertEqual(btc, balance['btc'])
-    #     self.assertEqual(eth, balance['eth'])
-    #     self.assertEqual(xrp, balance['xrp'])
-    #     self.assertEqual(mxn, balance['mxn'])
+    @mock.patch('requests.get')
+    def test_get_balance(self, mock_get):
+        btc = 0.0001
+        eth = 0.05
+        xrp = 50.32
+        mxn = 127.54
+
+        import json
+        content = json.dumps({'payload':
+            {'balances':
+                [{
+                    'currency': 'btc',
+                    'available': btc
+                }, {
+                    'currency': 'eth',
+                    'available': eth,
+                }, {
+                    'currency': 'xrp',
+                    'available': xrp,
+                }, {
+                    'currency': 'mxn',
+                    'available': mxn
+                }]
+            }})
+        content = json.loads(content)
+        mock_resp = self._mock_response(content=content, json_data=content)
+        mock_get.return_value = mock_resp
+
+        balance = self.account._get_balance()
+        self.assertEqual(btc, balance['btc'])
+        self.assertEqual(eth, balance['eth'])
+        self.assertEqual(xrp, balance['xrp'])
+        self.assertEqual(mxn, balance['mxn'])
 
     def test_get_btc(self):
         btc = 0.0001
