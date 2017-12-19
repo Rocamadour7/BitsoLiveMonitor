@@ -5,3 +5,4 @@ omit =
     *settings*,
     *tests/*,
     venv/*,
+    *__init__*,
