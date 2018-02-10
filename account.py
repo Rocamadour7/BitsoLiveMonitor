@@ -2,8 +2,7 @@ import time
 import hmac
 import hashlib
 import requests
-import configparser
-import os
+
 from settings import config
 
 
