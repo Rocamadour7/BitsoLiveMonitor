@@ -6,3 +6,4 @@ omit =
     *tests/*,
     venv/*,
     *__init__*,
+    */test_*,

@@ -4,7 +4,7 @@ import time
 import hmac
 import hashlib
 
-from account import Account
+from account_details.account import Account
 
 
 class TestAccount(unittest.TestCase):

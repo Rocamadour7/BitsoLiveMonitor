@@ -3,7 +3,7 @@ import hmac
 import hashlib
 import requests
 
-from settings import config
+from account_details.settings import config
 
 
 class Account:
