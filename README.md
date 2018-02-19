@@ -26,7 +26,7 @@ Using tools like:
 
 1. Clone this repo `git clone https://github.com/Rocamadour7/BitsoLiveMonitor.git`
 2. Run docker-compose `docker-compose up`
-3. Browse to `localhost:8080` to check the RabbitMQ management tool, to see the ticker and the producer in action.
+3. Browse to `localhost:8000` to check the RabbitMQ management tool, to see the ticker and the producer in action.
 4. Open `test.html`, then go to the console, to check that it is receiving realtime updates from the server.
 
 *Work in progress*
