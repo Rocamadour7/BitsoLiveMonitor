@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script>
+      var onMessage = function(data) {
+        console.log(data);
+      };
+      var connectToServer = function() {
+        var socket = io.connect('http://localhost:8080');
+        socket.on('new-trade', onMessage);
+      };
+
+      connectToServer();
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

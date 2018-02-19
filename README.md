@@ -11,11 +11,24 @@ Using tools like:
 * RabbitMQ
 
 ### Requirements:
-* Python 3+
+* Python 3.6
 * Requests
 * Python-dotenv
-* Websocket-Client
+* aiohttp
+* NodeJS
+* Express
+* amqplib
+* socket.io
+* Docker
+* docker-compose
+
+### How to run
+
+1. Clone this repo `git clone https://github.com/Rocamadour7/BitsoLiveMonitor.git`
+2. Run docker-compose `docker-compose up`
+3. Browse to `localhost:8080` to check the RabbitMQ management tool, to see the ticker and the producer in action.
+4. Open `test.html`, then go to the console, to check that it is receiving realtime updates from the server.
 
 *Work in progress*
 
-*Soon to be implemented dockerfiles, dockercompose, RabbitMQ, real-time web interface*
+*Soon to be implemented real-time web interface.*
