@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import MagicMock
 
-from api_ticker import APITicker
+from ticker.api_ticker import APITicker
 
 
 class TestTicker(unittest.TestCase):
