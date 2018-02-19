@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  ticker:
+    build: ./ticker
+    command: python ./async_worker.py
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - bitso
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    ports:
+      - "15672:15672"
+    networks:
+      - bitso
+  consumer:
+    build: ./consumer
+    command: npm start
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - bitso
+    ports:
+      - 8080:8080
+networks:
+  bitso:
