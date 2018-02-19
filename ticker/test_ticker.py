@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from unittest.mock import MagicMock
 
-from Ticker.api_ticker import APITicker
+from api_ticker import APITicker
 
 
 class TestTicker(unittest.TestCase):
@@ -39,7 +39,8 @@ class TestTicker(unittest.TestCase):
 
     @mock.patch('requests.get')
     def test_send_request(self, mock_get):
-        content = {'success': True, 'payload': [{'book': 'btc_mxn', 'volume': '22.31349615', 'high': '5750.00'}]}
+        content = {'success': True, 'payload': [
+            {'book': 'btc_mxn', 'volume': '22.31349615', 'high': '5750.00'}]}
         mock_resp = self._mock_response(content=content, json_data=content)
         mock_get.return_value = mock_resp
 
@@ -47,12 +48,14 @@ class TestTicker(unittest.TestCase):
         self.assertEqual(result, content)
 
     def test_success_handle_response(self):
-        success_response = {'success': True, 'payload': {'book': 'btc_mxn', 'volume': '22.31349615', 'high': '5750.00'}}
+        success_response = {'success': True, 'payload': {
+            'book': 'btc_mxn', 'volume': '22.31349615', 'high': '5750.00'}}
         payload = self.ticker._handle_response(success_response)
         self.assertEqual(success_response['payload'], payload)
 
     def test_fail_handle_response(self):
-        fail_response = {'success': False, 'error': {'message': 'ERROR_MESSAGE', 'code': 'ERROR_CODE'}}
+        fail_response = {'success': False, 'error': {
+            'message': 'ERROR_MESSAGE', 'code': 'ERROR_CODE'}}
         payload = self.ticker._handle_response(fail_response)
         self.assertIsNone(payload)
 
@@ -80,7 +83,8 @@ class TestTicker(unittest.TestCase):
         self.ticker.update()
         self.ticker._send_request.assert_called_once()
         self.ticker._handle_response.assert_called_once_with(self.ticker._send_request.return_value)
-        self.ticker._payload_handler.assert_called_once_with(self.ticker._handle_response.return_value)
+        self.ticker._payload_handler.assert_called_once_with(
+            self.ticker._handle_response.return_value)
 
     def test_update_without_payload(self):
         expected_response = {'success': True, 'payload': [{'book': 'btc_mxn', 'last': '161030.08'},
